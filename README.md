@@ -75,7 +75,7 @@ We can use terrform's built in import blocks to perform one-time state imports b
 8. `terraform plan -out=plan.tfplan` --> If this shows only imports and additions then you likely are ready to apply. If not, then review what went wrong or how your mappings are defined to ensure they are accurate.
 
 > **NOTE 1** In step 4 I use jq to make nice output to parse later for making your map file.
-> **NOTE 2** Each map file is going to be highly dependant on your needs. I've yet to figure out how to import the appropriate schema to automate this process for a target provider.
+> **NOTE 2** Each map file is going to be highly dependant on your needs! I've yet to figure out how to import the appropriate schema to automate this process for a target provider. Import ids can be wildly different based on the provider and resource. See `./import_map.aws.example.yaml` for one that merges several data points into a single id for instance.
 
 ## Details
 
