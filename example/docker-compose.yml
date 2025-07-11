@@ -1,0 +1,32 @@
+services:
+  vault:
+    image: vault:1.13.3
+    container_name: vault-dev
+    ports:
+      - "8200:8200"
+    #environment:
+      #- 'VAULT_LOCAL_CONFIG={"storage": {"file": {"path": "/vault/file"}}, "listener": [{"tcp": { "address": "0.0.0.0:8200", "tls_disable": true}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
+      # - VAULT_DEV_ROOT_TOKEN_ID=dev-token-12345
+      # - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      # - VAULT_ADDR=http://0.0.0.0:8200
+    cap_add:
+      - IPC_LOCK
+    command: vault server -dev -dev-root-token-id=dev-token-12345 -dev-listen-address=0.0.0.0:8200
+    volumes:
+      - vault-data:/vault/data
+    networks:
+      - vault-network
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  vault-data:
+    driver: local
+
+networks:
+  vault-network:
+    driver: bridge 

@@ -1,0 +1,7 @@
+# Used for creating terraform import blocks from terraform plan json files.
+
+registry.terraform.io/hashicorp/vault:
+  vault_mount:
+    id: "{path}"
+  vault_kv_secret_v2:
+    id: "{mount}/data/{name}"
