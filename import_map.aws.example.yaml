@@ -1,0 +1,7 @@
+# Used for creating terraform import blocks from terraform plan json files.
+
+registry.terraform.io/hashicorp/aws:
+  aws_ssoadmin_application_assignment:
+    id: "{application_arn},{principal_id},{principal_type}"
+  aws_ssoadmin_account_assignment:
+    id: "{principal_id},{principal_type},{target_id},{target_type},{permission_set_arn},{instance_arn}"

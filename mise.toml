@@ -1,0 +1,5 @@
+[tools]
+terraform = "1.12.2"
+uv = "latest"
+jq = "1.8.1"
+tf-summarize = "latest"
