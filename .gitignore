@@ -21,3 +21,4 @@ plan.json
 *.tfstate
 *.backup
 bootstrap/vendor
+.DS_Store
