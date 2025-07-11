@@ -78,7 +78,6 @@ def generate_import_blocks(resources, id_map: dict = None):
             resource_id_map = id_map[provider_name][resource_type]["id"]
             if resource_id_map:
                 extrapolated_id = resource_id_map.format(**resource["change"]["after"])
-                # extrapolated_id = resource_id_map.format(**resource['change'])
                 import_block = (
                     f"import {{\n"
                     f"  to = {resource_address}\n"
