@@ -20,5 +20,4 @@ providers_override.tf.json
 plan.json
 *.tfstate
 *.backup
-bootstrap/vendor
 .DS_Store

@@ -1,6 +1,6 @@
 # terraform-semi-auto-import
 
-This makes creating import blocks for your terraform manifests a bit easier.
+This makes creating import blocks some of your terraform manifests a bit easier.
 
 # Use Case
 
@@ -77,9 +77,12 @@ We can use terrform's built in import blocks to perform one-time state imports b
 > **NOTE 1** In step 4 I use jq to make nice output to parse later for making your map file.
 > **NOTE 2** Each map file is going to be highly dependant on your needs! I've yet to figure out how to import the appropriate schema to automate this process for a target provider. Import ids can be wildly different based on the provider and resource. See `./import_map.aws.example.yaml` for one that merges several data points into a single id for instance.
 
-## Details
+## How It Works
 
-This script reads the `resource_changes` dictionary of the plan file for anything with `change.action` == `create`. For each of the created resources it then looks up the provider for the resource then if that provider exists in your map file, it looks up the resource type itself for a mapping definition. If found, it attempts to extrapolate the it map based on the same created resource's `change.after` data.
+This script first parses out the `resource_changes` of the plan file for anything with `change.action` == `create`. It then correlates each item found to a map file entry based on the provider and resource name. If one exists, it extrapolates the ID map for an import block based on the same created resource's `change.after` data and then generates an import block.
+
+This means we can only auto-import predictable terraform based on named elements. We do not auto pull data from any outside resources which limits the scope of what can be imported using this method. For example, a new ec2 instance would be impossible to auto-import using this method. This is because the instance id required for the import block would never be available in our plan file data. But one could still produce some template import blocks using this script, then post-process the results with another script that replaces the output with found aws instances using some other script though!
+
 ## Requirements
 
 Install requirements via uv: `uv sync`
@@ -202,3 +205,11 @@ terraform apply plan.tfplan
 ```
 
 This will pull in the existing secrets as state and recreate your state file as it was before you deleted it.
+
+# Improvements
+
+The manual part of this, creating the map file entries, is pretty hard to automate. We could theoretically automate it somewhat using AI that scrapes the terraform registry documentation for each resource found and seeks out the import requirements to then generate the map entries. Or we could (somewhat dangerously) try to evoke terraform import commands with a bogus id and scrape the returned errors as some providers (like AWS) will give useful errors on the id format issues.
+
+I also am fascinated by the [terraformer](https://github.com/GoogleCloudPlatform/terraformer) project's ability to create terraform from existing resources for several dozen providers. Perhaps there is some way to generate import commands instead of painfully large terraform manifests with some clever engineering of it's source code.
+
+If anyone has better options for this arduous process leave a comment, I'm keen to know what I'm missing here. Otherwise, maybe this script will help get you part of the way to clean terraform state. May all your terraform pipelines run green my friends!
