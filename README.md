@@ -71,7 +71,7 @@ We can use terrform's built in import blocks to perform one-time state imports b
 4. `terraform show -no-color -json plan.tfplan | jq > plan.json`
 5. Look up the import schema to determine how the import id is formatted and if you already have all the data you need to construct the id in your existing plan file.
 6. Create an id map for your import data. This should target one or more providers and can include any known data you already have or that can be scraped from the existing plan file.
-7. Run the included script with your plan json data and the map file to create a new set of import commands. `uv run ./import-terraform.py ./plan.json new_imports.tf --id-map ./import_map.yaml`
+7. Run the [this script](https://github.com/zloeber/terraform-semi-auto-import/) with your plan json data and the map file to create a new set of import commands. `uv run ./import-terraform.py ./plan.json new_imports.tf --id-map ./import_map.yaml`
 8. `terraform plan -out=plan.tfplan` --> If this shows only imports and additions then you likely are ready to apply. If not, then review what went wrong or how your mappings are defined to ensure they are accurate.
 
 > **NOTE 1** In step 4 I use jq to make nice output to parse later for making your map file.
